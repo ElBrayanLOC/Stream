@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Prueba VDO.Ninja</title>
+</head>
+
+<style>
+	body,
+	html {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<body>
+	<h1>Prueba VDO.Ninja</h1>
+	<h2>Camara No-Ip</h2>
+
+	<div style="position: relative;">
+		<div id="divImg1" style="position: absolute; top: 210px; left: 400px; visibility: hidden; cursor: move;">
+			<img id="img1" border="0" width="320" height="280"
+				src="https://www.definicionabc.com/wp-content/uploads/formula1.jpg" />
+		</div>
+		<div id="divImg2" style="position: absolute; top: 410px; left: 100px; visibility: hidden; cursor: move;">
+			<img id="img2" border="0" height="122" width="160" width="160"
+				src="https://economipedia.com/wp-content/uploads/image-463.png" />
+		</div>
+
+		<!--Stream-->
+		<div id="iframe" class="dos" width="1280" height="720"
+			allow="autoplay;camera;microphone;fullscreen;picture-in-picture;display-capture;midi;geolocation;"
+			src="https://vdo.ninja/?view=LabRemotosUnicaucaStream&password=1234?wmode=transparent">
+		</div>
+	</div>
+	<div>
+		<div>
+			<button onclick="activarDato1()">Primera Imagen</button>
+			<input id="my-range1" type="range" step="0.25" min="0.25" max="2" />
+		</div>
+		<span>--------------------</span>
+		<div>
+			<button onclick="activarDato2()">Segunda Imagen</button>
+			<input id="my-range2" type="range" step="0.25" min="0.25" max="2" />
+		</div>
+	</div>
+</body>
+
+
+<script>
+	var range1 = document.getElementById("my-range1");
+	var range2 = document.getElementById("my-range2");
+	var img1 = document.getElementById("divImg1");
+	var img2 = document.getElementById("divImg2");
+
+	range1.addEventListener("change", function () {
+		img1.style.zoom = this.value;
+	});
+
+	range2.addEventListener("change", function () {
+		img2.style.zoom = this.value;
+	});
+
+	function addiframe(url) {
+		var x = document.createElement("IFRAME");
+		x.style.width = "1280px";
+		x.style.height = "720px";
+		x.setAttribute("src", url);
+		document.getElementById("iframe").innerHTML = '';
+		document.getElementById("iframe").appendChild(x);
+	}
+	document.addEventListener('DOMContentLoaded', function () {
+		addiframe('https://vdo.ninja/?view=LabRemotosUnicaucaStream&password=1234');
+	});
+
+	function activarDato1() {
+		var img = document.getElementById("divImg1");
+		if (img.style.visibility === 'hidden') {
+			img.style.visibility = "visible";
+		} else {
+			img.style.visibility = "hidden";
+		}
+	}
+
+	function activarDato2() {
+		var img = document.getElementById("divImg2");
+		if (img.style.visibility === 'hidden') {
+			img.style.visibility = "visible";
+		} else {
+			img.style.visibility = "hidden";
+		}
+	};
+
+	dragElement(document.getElementById("divImg1"));
+	dragElement(document.getElementById("divImg2"));
+
+	function dragElement(elmnt) {
+		var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+		if (document.getElementById(elmnt.id + "header")) {
+			document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+		} else {
+			elmnt.onmousedown = dragMouseDown;
+		}
+
+		function dragMouseDown(e) {
+			e = e || window.event;
+			e.preventDefault();
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			document.onmouseup = closeDragElement;
+			document.onmousemove = elementDrag;
+		}
+
+		function elementDrag(e) {
+			e = e || window.event;
+			e.preventDefault();
+			pos1 = pos3 - e.clientX;
+			pos2 = pos4 - e.clientY;
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+			elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+		}
+
+		function closeDragElement() {
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}
+</script>
+
+</html>
